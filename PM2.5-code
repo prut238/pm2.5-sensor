@@ -1,0 +1,41 @@
+#include <I2C.h>
+int paddress = 0x033;
+
+#define M_LL_Register 0x20
+#define M_LH_Register 0x01
+#define M_HL_Register 0x22
+
+
+unsinged long LL,LL1,LH,LH1,HL,HL1;
+float tt;
+void setup() {
+  I2c.begin();
+  I2c.setSpeed(400000); 
+  Serial.begin(9600);
+  delay(1000);
+  
+}
+
+void loop() {
+  
+    I2c.read(paddress,M_LL_Register,2);
+    LL = I2c.receive();
+    LL1 = I2c.receive();
+    I2c.end();
+
+    I2c.read(paddress,M_LH_Register,2);
+    LH = I2c.receive();
+    LH1 = I2c.receive();
+    I2c.end();
+    
+    I2c.read(paddress,M_HL_Register,2);
+    HL = I2c.receive();
+    HL1 = I2c.receive();
+    I2c.end();
+
+    tt = LL + (LH*256) +(HL1 * 665536);
+    Serial.println(tt/1000);
+
+   delay(5000);
+
+}
